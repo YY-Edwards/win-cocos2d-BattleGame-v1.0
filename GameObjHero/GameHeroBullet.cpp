@@ -46,7 +46,7 @@ void GameHeroBullet::setIsVisable()
 
 }
 
-void GameHeroBullet::setIsNotVisable(Node* node)
+void GameHeroBullet::setIsNotVisable(Node* dd )
 {
 	this->setVisible(false);
 	isvisable = false;

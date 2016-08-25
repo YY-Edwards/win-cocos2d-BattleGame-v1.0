@@ -73,7 +73,7 @@ void GameObjEnemy::setdie()
 
 }
 
-void GameObjEnemy::restart(Node * node)
+void GameObjEnemy::restart(Node* )
 {
 	mainbody->setVisible(true);
 	boom->setVisible(false);
@@ -101,14 +101,14 @@ void GameObjEnemy::movestart()
 	bezier2.controlPoint_2 = CCPointMake(this->getPosition().x + 400, 280);
 	bezier2.endPosition = CCPointMake(this->getPosition().x , - 70);
 	
-	auto bezierBy2 = CCBezierTo::create(6, bezier2);
+	BezierTo *bezierBy2 = BezierTo::create(6, bezier2);
 
 	ccBezierConfig bezier1;
 	bezier1.controlPoint_1 = CCPointMake(this->getPosition().x + 400, 330);
 	bezier1.controlPoint_2 = CCPointMake(this->getPosition().x - 400, 280);
 	bezier1.endPosition = CCPointMake(this->getPosition().x , - 70);
 
-	auto bezierBy2 = CCBezierTo::create(6, bezier1);
+	BezierTo *bezierBy1 = BezierTo::create(6, bezier1);
 
 
 	//设置三种移动方式，两种曲线移动方式和一种直线移动方式。

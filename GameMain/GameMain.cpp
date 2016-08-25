@@ -88,12 +88,13 @@ bool GameMain::init()
 
 
 	//初始化猪脚的子弹
+	Node * dd;
 
 	bullets = Array::createWithCapacity(5);
 	for (int i = 0; i < bullets->capacity(); i++)
 	{
 		auto mybullet = new GameHeroBullet();
-		mybullet->setIsNotVisable();
+		mybullet->setIsNotVisable(dd);
 		mybullet->setScale(0.5);
 		bullets->addObject(mybullet);
 		this->addChild(mybullet, 3);
@@ -103,12 +104,13 @@ bool GameMain::init()
 
 
 	//初始化敌人的子弹
+	Node * aa;
 	enemybullets = Array::createWithCapacity(10);
 
 	for (int i = 0; i < enemybullets->capacity(); i++)
 	{
 		auto e_bullet = new GameEnemyBullet();
-		e_bullet->setIsNotVisable();
+		e_bullet->setIsNotVisable(aa);
 		e_bullet->setScale(0.5);
 
 		enemybullets->addObject(e_bullet);
@@ -136,7 +138,8 @@ bool GameMain::init()
 	pCloseItem->setScale(0.5);
 
 	auto pMenu = Menu::create(pCloseItem, NULL);
-	pMenu->setPosition(CCPointZero);
+	//调整修改
+	pMenu->setPosition(ccp(0, 0));
 	this->addChild(pMenu, 5, 25);
 	pMenu->setVisible(false);
 	pMenu->setEnabled(false);
@@ -178,13 +181,14 @@ void GameMain::update(float time)
 
 	}
 
-	auto hpos = hero->getPosition();
+	Point hpos = hero->getPosition();
+
 	//敌人和猪脚子弹的碰撞检测
 	for (int i = 0; i < 3; i++)
 	{
 		GameObjEnemy  *enemy = ((GameObjEnemy*)enemys->objectAtIndex(i));
 
-		auto epos = enemy->getPosition();
+		Point epos = enemy->getPosition();
 
 		if (enemy->islife)
 		{
@@ -204,8 +208,6 @@ void GameMain::update(float time)
 
 			}
 		}
-	}
-
 		//敌人和猪脚的碰撞检测
 		if (!isreduce && enemy->islife && isCollion(hpos, epos, 21, 22.5, 21, 28))
 		{
@@ -213,6 +215,7 @@ void GameMain::update(float time)
 			setherohurt();
 
 		}
+	}
 
 		//猪脚和敌人子弹的碰撞检测
 		if (!isreduce)
@@ -229,7 +232,20 @@ void GameMain::update(float time)
 			}
 		}
 }
+bool GameMain::isCollion(Point p1, Point p2, int w1, int h1, int w2, int h2)
+{
+	
+	// 判断两个矩形是否碰撞
+	if (abs(p1.x - p2.x) < w1 + w2 && abs(p1.y - p2.y) < h1 + h2)
+	{
+		return true;
 
+	}
+	return false;
+
+
+
+}
 
 Scene* GameMain::scene()
 {
@@ -370,3 +386,4 @@ void GameMain::setover()
 
 
 }
+

@@ -14,7 +14,7 @@ public:
 	GameEnemyBullet();
 	virtual ~GameEnemyBullet();
 	void setIsVisable();//设置子弹在使用
-	void setIsNotVisable(Node * node);//设置子弹没有使用
+	void setIsNotVisable(Node* dd);//设置子弹没有使用
 	bool getIsvisable();//获得子弹是否在使用
 
 	virtual void onEnter();

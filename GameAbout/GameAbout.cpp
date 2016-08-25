@@ -44,7 +44,7 @@ bool GameAbout::init()
 	auto myjineng = LabelTTF::create(inf, "Marker Felt", 40,
 		CCSizeMake(400, 400), kCCTextAlignmentLeft);
 
-	myjineng->setAnchorPoint(ccp(0.1));
+	myjineng->setAnchorPoint(ccp(0,1));
 	myjineng->setColor(ccc3(200, 200, 200));
 	myjineng->setPosition(ccp(50, 600));
 	myjineng->addChild(myjineng);
@@ -129,20 +129,24 @@ void GameAbout::onExit()
 
 }
 
-void GameAbout::menuEnter(Node* node)
+void GameAbout::menuEnter(Node*)
 {
 	//菜单进入后，菜单项点击有效哦
 	
 	auto  mainmenu = this->getChildByTag(4);
 
+	//3.0版本后没有Array，取而代之的是容器
+	auto temp = mainmenu->getChildren();
 
-	Vector<CCMenuItemImage*>temp = mainmenu->getChildren();
+	
+	for (auto&e : temp)
+	{
+		;
 
-	Vector<CCMenuItemImage*>temp;
+	}
 
 
-
-	(((mainmenu->getChildren())->objectAtIndex(0)->setEnabled(true);
+	//((MenuItemImage*)temp->objectAtIndex(0))->setEnabled(true);
 
 
 

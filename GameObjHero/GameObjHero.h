@@ -37,8 +37,8 @@ public:
 
 	//´¥ÃþÏà¹Ø
 	virtual bool onTouchBegan(Touch* touch, Event* event);
-	virtual bool onTouchMoved(Touch* touch, Event* event);
-	virtual bool onTouchEnded(Touch* touch, Event* event);
+	virtual void onTouchMoved(Touch* touch, Event* event);
+	virtual void onTouchEnded(Touch* touch, Event* event);
 
 	//void onKeyPressed(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event);
 	//void onKeyReleased(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event);

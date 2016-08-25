@@ -17,7 +17,7 @@ public:
 	GameObjEnemy();
 	virtual ~GameObjEnemy();
 	void setdie();//狗博士死亡函数
-	void restart(Node * node);//狗博士复位
+	void restart(Node* dd);//狗博士复位
 	void movestart();//设置狗博士的移动方式
 	void releasebullet(float dt);//释放子弹
 	void setType(short var);

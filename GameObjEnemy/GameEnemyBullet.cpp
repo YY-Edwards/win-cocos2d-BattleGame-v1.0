@@ -47,7 +47,7 @@ void GameEnemyBullet::setIsVisable()
 
 }
 
-void GameEnemyBullet::setIsNotVisable(Node* node)
+void GameEnemyBullet::setIsNotVisable(Node* dd)
 {
 	this->setVisible(false);
 	isvisable = false;

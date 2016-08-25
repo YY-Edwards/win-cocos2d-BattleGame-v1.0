@@ -18,7 +18,7 @@ public:
 
 	virtual void onExit();
 
-	void menuEnter(Node * node);
+	void menuEnter(Node*);
 
 	//创建场景的静态函数
 	static cocos2d::Scene* scene();

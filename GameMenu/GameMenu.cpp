@@ -130,13 +130,21 @@ void GameMenu::onEnter()
 void GameMenu::menuEnter(Node * node)
 {
 	//菜单进入后，菜单项点击有效
-	auto mainmenu = this->getChildByTag(3);
-	Array* temp = mainmenu->getChildren();
+	Node* mainmenu = this->getChildByTag(3);
 
-	for (size_t i = 0; i < temp->count(); i++)
+	Vector<Node*>temp = mainmenu->getChildren();
+
+	for (auto& e: temp)
 	{
-		((MenuItemImage*)temp->objectAtIndex(i))->setEnabled(true);
+		;
 	}
+
+	//Array* temp = mainmenu->getChildren();
+
+	//for (size_t i = 0; i < temp->count(); i++)
+	//{
+	//	((MenuItemImage*)temp->objectAtIndex(i))->setEnabled(true);
+	//}
 
 
 

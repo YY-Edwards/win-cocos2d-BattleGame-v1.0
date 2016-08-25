@@ -46,12 +46,12 @@ void GameObjHero::onEnter()
 	addChild(tail);
 
 	//手
-	lefthand = CCSprite::create("Game11_1/catHand1.png");
+	lefthand = CCSprite::create("Game11_1/catHandl.png");
 	lefthand->setAnchorPoint(ccp(1, 0.5));
 	lefthand->setPosition(ccp(-18, -20));
 	addChild(lefthand);
 
-	righthand = CCSprite::create("Game11_1/catHand2.png");
+	righthand = CCSprite::create("Game11_1/catHandr.png");
 	righthand->setAnchorPoint(ccp(18, -20));
 	righthand->setPosition(ccp(0, 0.5));
 	addChild(righthand);
@@ -107,7 +107,7 @@ bool GameObjHero::onTouchBegan(Touch* touch, Event* event)
 
 }
 
-bool GameObjHero::onTouchMoved(Touch* touch, Event* event)
+void GameObjHero::onTouchMoved(Touch* touch, Event* event)
 {
 	if (iscontrol){
 		auto touchPoint = touch->getLocationInView();
@@ -142,7 +142,7 @@ bool GameObjHero::onTouchMoved(Touch* touch, Event* event)
 
 }
 
-bool GameObjHero::onTouchEnded(Touch* touch, Event* event)
+void GameObjHero::onTouchEnded(Touch* touch, Event* event)
 {
 	//触摸结束时，需要将猪脚的两只手放下并且将iscontol置为false.
 
