@@ -124,4 +124,19 @@ void GameMark::addnumber(int var)
 
 }
 
+GameMark::GameMark()
+{
+	;
+}
+GameMark::~GameMark()
+{
+	;
+}
 
+void GameMark::onExit()
+{
+	
+	Node::onEnter();
+
+
+}

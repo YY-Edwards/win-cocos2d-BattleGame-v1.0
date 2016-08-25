@@ -4,7 +4,7 @@
 using namespace cocos2d;
 
 
-class GameObjHero :public CCNode//不再使用 TouchDelegate方式来将touch事件捆绑到sprite上。
+class GameObjHero :public Node//不再使用 TouchDelegate方式来将touch事件捆绑到sprite上。
 {								//// Adds touch event listener
 
 	/*
@@ -23,23 +23,22 @@ class GameObjHero :public CCNode//不再使用 TouchDelegate方式来将touch事件捆绑到s
 
 public:
 
-	CCSprite *lefthand;//左手
-	CCSprite *righthand;//右手
-	CCPoint offset;		//触摸偏移位置
+	Sprite *lefthand;//左手
+	Sprite *righthand;//右手
+	Point offset;		//触摸偏移位置
 	bool iscontrol;		//是否在控制猪脚
 
 	GameObjHero();
 	virtual ~GameObjHero();
 	void releasebullet(float dt);//释放子弹
-	CCRect rect();
+	Rect rect();
 	virtual void onEnter();
 	virtual void onExit();
 
 	//触摸相关
-	bool containsTouchLocation(CCTouch* touch);
-	virtual bool onTouchBegan(CCTouch* touch, CCEvent* event);
-	virtual bool onTouchMoved(CCTouch* touch, CCEvent* event);
-	virtual bool onTouchEnded(CCTouch* touch, CCEvent* event);
+	virtual bool onTouchBegan(Touch* touch, Event* event);
+	virtual bool onTouchMoved(Touch* touch, Event* event);
+	virtual bool onTouchEnded(Touch* touch, Event* event);
 
 	//void onKeyPressed(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event);
 	//void onKeyReleased(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event);

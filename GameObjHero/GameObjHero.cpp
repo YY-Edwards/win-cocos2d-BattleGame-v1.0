@@ -1,4 +1,5 @@
 #include "GameObjHero.h"
+#include "GameMain\GameMain.h"
 
 void GameObjHero::onEnter()
 {
@@ -7,12 +8,15 @@ void GameObjHero::onEnter()
 
 	// Adds Touch Event Listener
 	auto listener = EventListenerTouchOneByOne::create();
+	//设置吞噬为true,不让触摸往下传递
 	listener->setSwallowTouches(true);
 
+	//和回调函数绑定
 	listener->onTouchBegan = CC_CALLBACK_2(GameObjHero::onTouchBegan, this);
 	listener->onTouchMoved = CC_CALLBACK_2(GameObjHero::onTouchMoved, this);
 	listener->onTouchEnded = CC_CALLBACK_2(GameObjHero::onTouchEnded, this);
 
+	//添加监听器到事件分发器中
 	_eventDispatcher->addEventListenerWithFixedPriority(listener, -10);
 	_touchListener = listener;
 
@@ -61,12 +65,30 @@ void GameObjHero::onEnter()
 
 }
 
-
-bool GameObjHero::onTouchBegan(CCTouch* touch, CCEvent* event)
+void GameObjHero::onExit()
 {
-	if ((GameMain *)this->getParent()->isover)//判断猪脚是否已阵亡
+	Node::onExit();
+
+}
+
+bool GameObjHero::onTouchBegan(Touch* touch, Event* event)
+{
+	
+	//获取精灵对象并取得精灵的矩阵
+	auto sprite = static_cast<Sprite*>(event->getCurrentTarget());
+
+	Rect rect = sprite->getBoundingBox();
+
+	//获取触摸点的坐标
+
+	auto point = touch->getLocation();
+
+	
+	if (((GameMain *)this->getParent())->isover)//判断猪脚是否已阵亡
 		return false;
-	if (!containsTouchLocation(touch)){//判断触摸点是否在猪脚的矩形框中
+
+
+	if (!rect.containsPoint(point)){//判断触摸点是否在猪脚的矩形框中
 
 		return false;
 	}
@@ -85,7 +107,7 @@ bool GameObjHero::onTouchBegan(CCTouch* touch, CCEvent* event)
 
 }
 
-bool GameObjHero::onTouchMoved(CCTouch* touch, CCEvent* event)
+bool GameObjHero::onTouchMoved(Touch* touch, Event* event)
 {
 	if (iscontrol){
 		auto touchPoint = touch->getLocationInView();
@@ -120,7 +142,7 @@ bool GameObjHero::onTouchMoved(CCTouch* touch, CCEvent* event)
 
 }
 
-bool GameObjHero::onTouchEnded(CCTouch* touch, CCEvent* event)
+bool GameObjHero::onTouchEnded(Touch* touch, Event* event)
 {
 	//触摸结束时，需要将猪脚的两只手放下并且将iscontol置为false.
 
@@ -131,6 +153,8 @@ bool GameObjHero::onTouchEnded(CCTouch* touch, CCEvent* event)
 		lefthand->setFlipY(false);
 		righthand->setFlipY(false);
 	}
+
+	CCLOG(" \r\n Touch-End	\r\n");
 }
 
 GameObjHero::GameObjHero()
@@ -147,5 +171,29 @@ GameObjHero::~GameObjHero()
 
 }
 
+Rect GameObjHero::rect()
+{
+	auto s = CCSizeMake(85, 90);
 
+	return CCRectMake(-s.width / 2, -s.height, s.width, s.height);
+
+
+}
+
+void GameObjHero::releasebullet(float dt)
+{
+	//释放子弹
+	if (iscontrol)
+	{
+		auto pos = this->getPosition();
+
+		auto p = (GameMain*)this->getParent();
+
+		p->releaseheroBullet(pos.x, pos.y + 30);
+
+
+	}
+
+
+}
 

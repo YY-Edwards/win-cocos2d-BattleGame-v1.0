@@ -38,14 +38,17 @@ public:
 
 	
 	void setover();
-	virtual void update(float time) override;
+	virtual void update(float time);
 	bool isCollion(Point p1, Point p2, int w1, int h1, int w2, int h2);
 	void setherohurt();
-	void setenemyhurt();
+	//void setenemyhurt();
 	void resetreduce(float da);
 
-	GameMain();
-	~GameMain();
+	void releaseenemyBullet(int x, int y);
+	void releaseheroBullet(int x, int y);
+
+	//GameMain();
+	//~GameMain();
 
 	//创建场景的静态函数
 	static cocos2d::Scene* scene();

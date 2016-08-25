@@ -12,9 +12,12 @@ public:
 	Texture2D *ui;
 
 	void addnumber(int var);
+
 	virtual void onEnter();
 	virtual void onExit();
 
+	GameMark();
+	virtual ~GameMark();
 
 
 

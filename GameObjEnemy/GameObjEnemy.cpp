@@ -1,4 +1,12 @@
 #include "GameObjEnemy.h"
+#include "GameMain\GameMain.h"
+
+GameObjEnemy::GameObjEnemy()
+{}
+GameObjEnemy::~GameObjEnemy()
+{}
+
+
 
 void GameObjEnemy::onEnter()
 {
@@ -59,13 +67,13 @@ void GameObjEnemy::setdie()
 	boomAnimation->setRestoreOriginalFrame(true);//动画结束时恢复至初始帧
 
 	//运行爆炸动画之后，会重新开始调用函数restart.
-	boom->runAction(CCSequence::create(CCAnimate::
-		create(boomAnimation), CCCallFunc::create(this, callfuncN_selector(GameObjEnemy::restart)), NULL));
+	boom->runAction(Sequence::create(Animate::
+		create(boomAnimation), CallFuncN::create(this, callfuncN_selector(GameObjEnemy::restart)), NULL));
 
 
 }
 
-void GameObjEnemy::restart()
+void GameObjEnemy::restart(Node * node)
 {
 	mainbody->setVisible(true);
 	boom->setVisible(false);
@@ -131,6 +139,25 @@ void GameObjEnemy::movestart()
 	}
 
 	schedule(schedule_selector(GameObjEnemy::releasebullet), 1.2f);//边移动边释放子弹
+
+
+}
+void GameObjEnemy::releasebullet(float da)
+{
+	
+	auto size = Director::getInstance()->getWinSize();
+
+	auto pos = this->getPosition();
+
+	if (pos.y > 20 && pos.y < size.height && islife)
+	{
+	
+		GameMain *p = (GameMain *)this->getParent();
+
+		p->releaseenemyBullet(pos.x, pos.y - 30);
+
+	}
+
 
 
 }

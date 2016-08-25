@@ -309,3 +309,64 @@ void GameMain::setherohurt()
 
 
 }
+void GameMain::resetreduce(float da)
+{
+	isreduce = false;
+
+}
+
+void GameMain::releaseenemyBullet(int x, int y)
+{
+
+	//遍历子弹数组，不在使用的子弹释放
+	for (size_t i = 0; i < enemybullets->capacity(); i++)
+	{
+		if (!((GameEnemyBullet*)enemybullets->objectAtIndex(i))->getIsvisable())
+		{
+			//设置位置，并设置为可见
+			((GameEnemyBullet*)enemybullets->objectAtIndex(i))->setPosition(ccp(x, y));
+			((GameEnemyBullet*)enemybullets->objectAtIndex(i))->setIsVisable();
+			break;
+
+		}
+
+	}
+
+}
+
+void GameMain::releaseheroBullet(int x, int y)
+{
+
+
+	//遍历子弹数组，不在使用的子弹释放
+	for (size_t i = 0; i < bullets->capacity(); i++)
+	{
+		if (!((GameHeroBullet*)bullets->objectAtIndex(i))->getIsvisable())
+		{
+			//设置位置，并设置为可见
+			((GameHeroBullet*)bullets->objectAtIndex(i))->setPosition(ccp(x, y));
+			((GameHeroBullet*)bullets->objectAtIndex(i))->setIsVisable();
+			break;
+
+		}
+
+	}
+
+
+
+}
+
+void GameMain::setover()
+{
+	//设置游戏结束
+	auto pMenu = (Menu*)this->getChildByTag(25);
+	pMenu->setVisible(true);
+	pMenu->setEnabled(true);
+	gameover->setVisible(true);
+	gameover->setScale(0);
+	pMenu->setScale(0); 
+	pMenu->runAction(ScaleTo::create(0.5, 1));
+	gameover->runAction(ScaleTo::create(0.5, 0.5));
+
+
+}

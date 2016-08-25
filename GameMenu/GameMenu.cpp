@@ -1,4 +1,6 @@
 #include"GameMenu\GameMenu.h"
+#include"GameMain\GameMain.h"
+#include"GameAbout\GameAbout.h"
 
 bool GameMenu::init()
 { 
@@ -124,3 +126,93 @@ void GameMenu::onEnter()
 	bgstar->runAction(MoveBy::create(0.5, ccp(size.width/3, 0)));
 
 }
+
+void GameMenu::menuEnter(Node * node)
+{
+	//菜单进入后，菜单项点击有效
+	auto mainmenu = this->getChildByTag(3);
+	Array* temp = mainmenu->getChildren();
+
+	for (size_t i = 0; i < temp->count(); i++)
+	{
+		((MenuItemImage*)temp->objectAtIndex(i))->setEnabled(true);
+	}
+
+
+
+}
+
+void GameMenu::onExit()
+{
+	Layer::onExit();
+
+
+}
+
+void GameMenu::menuNewGameCallbck(cocos2d::Ref* pSender)
+{
+	Director::getInstance()->replaceScene(GameMain::scene());
+
+}
+
+void GameMenu::menuSoundCallbck(cocos2d::Ref* pSender)
+{
+	if (!issound)
+	{
+		soundItem->setNormalImage(Sprite::create("Game11_1/sound-on-A.png"));
+		soundItem->setDisabledImage(Sprite::create("Game11_1/sound-on-B.png"));
+		
+		//play music
+		SimpleAudioEngine::getInstance()->playBackgroundMusic("Game11_1/Fade.wav", true);
+
+		issound = true;
+
+	}
+	else
+	{
+		soundItem->setNormalImage(Sprite::create("Game11_1/sound-off-A.png"));
+		soundItem->setDisabledImage(Sprite::create("Game11_1/sound-off-B.png"));
+
+		//stop music
+		SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+
+		issound = false;
+
+
+	}
+	
+	
+	
+	Director::getInstance()->replaceScene(GameMain::scene());
+
+}
+
+void GameMenu::menuContinueCallbck(cocos2d::Ref* pSender)
+{
+	Director::getInstance()->replaceScene(GameMain::scene());
+
+}
+
+void GameMenu::menuAboutCallbck(cocos2d::Ref* pSender)
+{
+	Director::getInstance()->replaceScene(GameAbout::scene());
+
+}
+
+Scene* GameMenu::scene()
+{
+
+	//创建场景
+	auto scene = Scene::create();
+
+	//创建层 新建GameAbout对象
+	auto layer = GameMenu::create();//头文件中CREATE_FUNC(GameAbout);宏添加的静态函数，自动调用init()
+
+	//添加层
+	scene->addChild(layer);
+
+	return scene;
+
+
+}
+
