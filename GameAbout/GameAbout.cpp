@@ -136,12 +136,12 @@ void GameAbout::menuEnter(Node*)
 	auto  mainmenu = this->getChildByTag(4);
 
 	//3.0版本后没有Array，取而代之的是容器
-	auto temp = mainmenu->getChildren();
+	//auto temp = mainmenu->getChildren();
 
 	
-	for (auto&e : temp)
+	for (auto&e : mainmenu->getChildren())
 	{
-		;
+		((MenuItemImage*)e)->setEnabled(true);
 
 	}
 

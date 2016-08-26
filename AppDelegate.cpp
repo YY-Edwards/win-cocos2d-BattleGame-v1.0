@@ -4,8 +4,18 @@
 
 USING_NS_CC;
 
-static cocos2d::Size designResolutionSize = cocos2d::Size(480, 320);
-static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
+//注意此处是竖屏的配置
+//宽和高
+static cocos2d::Size designResolutionSize = cocos2d::Size(320, 480);
+
+// 更改屏幕大小
+//static cocos2d::Size designResolutionSize = cocos2d::Size(640, 960);
+
+//static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
+
+static cocos2d::Size smallResolutionSize = cocos2d::Size(320, 480);
+//以下应该是横屏的配置
+
 static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
 static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
 
@@ -37,7 +47,10 @@ static int register_all_packages()
 
 bool AppDelegate::applicationDidFinishLaunching() {
     // initialize director
+	//初始化导演类
     auto director = Director::getInstance();
+
+	//设置OpenGl视图
     auto glview = director->getOpenGLView();
     if(!glview) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
@@ -48,15 +61,19 @@ bool AppDelegate::applicationDidFinishLaunching() {
         director->setOpenGLView(glview);
     }
 
-    // turn on display FPS
+    // turn off display FPS
+	//设置是否显示每帧时间
     director->setDisplayStats(false);
 
     // set FPS. the default value is 1.0/60 if you don't call this
+	//设置每帧时间
     director->setAnimationInterval(1.0 / 60);
 
     // Set the design resolution
-    glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::NO_BORDER);
+	glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::EXACT_FIT);
     Size frameSize = glview->getFrameSize();
+
+	//根据尺寸设置合适的缩放比例
     // if the frame's height is larger than the height of medium size.
     if (frameSize.height > mediumResolutionSize.height)
     {        
@@ -81,9 +98,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	//此处做替换
 
     //auto scene = HelloWorld::createScene();
+	//创建场景
 	auto scene = GameMenu::scene();
 
     // run
+	//运行场景
     director->runWithScene(scene);
 
     return true;

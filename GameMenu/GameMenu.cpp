@@ -11,20 +11,21 @@ bool GameMenu::init()
 
 	//主菜单的实现：
 	//只需要把界面控件加入布景层，然后设置按钮的回调函数就可以了
-	auto size = Director::sharedDirector()->getWinSize();
+	//auto size = Director::sharedDirector()->getWinSize();
+	auto size = Director::getInstance()->getWinSize();
 
 	//初始化背景
 	auto bg = Sprite::create("Game11_1/backGround.png");
-	bg->setScale(0.5);
+	bg->setScale(0.5);//屏幕是320x480,而资源是640x960,因此需要缩小。
 	bg->setPosition(ccp(size.width / 2, size.height / 2));//正中央
 	this->addChild(bg, 0, 0);
 
 	//初始化背景星球
 	auto bgstar = Sprite::create("Game11_1/moon.png");
 	//锚点是指节点在进行形状变换、位置变动时依据的基准点。
-	bgstar->setAnchorPoint(ccp(0.5, 0));
+	bgstar->setAnchorPoint(ccp(0.5, 0.0));
 	bgstar->setScale(0.5);
-	bgstar->setPosition(ccp(size.width / 3*2, 0));
+	bgstar->setPosition(ccp(size.width /2, 0));
 	this->addChild(bgstar, 1, 1);
 
 	//初始化标题
@@ -71,7 +72,7 @@ bool GameMenu::init()
 
 	//使用按钮创建菜单
 	auto mainmenu = Menu::create(newGameItem, continueItem, aboutItem,
-		soundItem, NULL);
+		soundItem, nullptr);
 	mainmenu->setPosition(ccp(0, 0));
 	this->addChild(mainmenu, 1, 3);
 
@@ -103,7 +104,8 @@ void GameMenu::onEnter()
 {
 	Layer::onEnter();
 
-	auto size = Director::sharedDirector()->getWinSize();
+	//auto size = Director::sharedDirector()->getWinSize();
+	auto size = Director::getInstance()->getWinSize();
 
 	//界面进入时，运行菜单项进入动作
 	auto mainmenu = this->getChildByTag(3);
@@ -121,8 +123,10 @@ void GameMenu::onEnter()
 	//用内部动作创建EaseElasticIn动作，缓动曲线周期（弧度值）是0.3。
 	title->runAction(EaseElasticIn::create(MoveBy::create(0.5, ccp(0, -100))));
 
+
+	//月亮背景的进入动作
 	auto bgstar = this->getChildByTag(1);
-	bgstar->setPositionY(size.height /3);
+	bgstar->setPositionX(size.width /3);
 	bgstar->runAction(MoveBy::create(0.5, ccp(size.width/3, 0)));
 
 }
@@ -130,13 +134,21 @@ void GameMenu::onEnter()
 void GameMenu::menuEnter(Node * node)
 {
 	//菜单进入后，菜单项点击有效
-	Node* mainmenu = this->getChildByTag(3);
+	auto mainmenu = this->getChildByTag(3);
 
-	Vector<Node*>temp = mainmenu->getChildren();
+	//Vector<Node*>temp = mainmenu->getChildren();
 
-	for (auto& e: temp)
+	//MenuItemImage* temp;
+
+	for (auto& e : mainmenu->getChildren())
 	{
-		;
+	    //temp = (MenuItemImage*)(e->);
+
+		((MenuItemImage*)e)->setEnabled(true);
+		//temp = (MenuItemImage*)e;
+		//temp->setEnabled(true);
+		//temp->setEnabled(true);
+
 	}
 
 	//Array* temp = mainmenu->getChildren();
@@ -159,6 +171,8 @@ void GameMenu::onExit()
 
 void GameMenu::menuNewGameCallbck(cocos2d::Ref* pSender)
 {
+	//还有一种是不把旧场景从内存中释放掉，这样可以提高加载速度，
+	//但是内存不足以支撑的话，建议采用replace
 	Director::getInstance()->replaceScene(GameMain::scene());
 
 }
