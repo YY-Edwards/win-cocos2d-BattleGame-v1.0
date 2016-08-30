@@ -66,13 +66,12 @@ bool GameMenu::init()
 
 	soundItem = MenuItemImage::create("Game11_1/sound-on-A.png",
 		"Game11_1/sound-on-B.png", this, menu_selector(GameMenu::menuSoundCallbck));
-	aboutItem->setScale(0.5);
-	aboutItem->setPosition(ccp(40, 40));
-	aboutItem->setEnabled(false);
+	soundItem->setScale(0.5);
+	soundItem->setPosition(ccp(40, 40));
+	soundItem->setEnabled(false);
 
 	//使用按钮创建菜单
-	auto mainmenu = Menu::create(newGameItem, continueItem, aboutItem,
-		soundItem, nullptr);
+	auto mainmenu = Menu::create(newGameItem, continueItem, aboutItem, soundItem, nullptr);
 	mainmenu->setPosition(ccp(0, 0));
 	this->addChild(mainmenu, 1, 3);
 
@@ -99,7 +98,7 @@ bool GameMenu::init()
 }
 
 
-//为按钮加入动作可以使游戏更生动
+//为按钮加入动作可以使游戏更生动 
 void GameMenu::onEnter()
 {
 	Layer::onEnter();
@@ -112,7 +111,7 @@ void GameMenu::onEnter()
 	mainmenu->setPositionX(-200);
 	mainmenu->
 		runAction(Sequence::create(EaseElasticIn::create(MoveTo::create
-		(0.5, ccp(0, 0))), CallFuncN::create(this, callfuncN_selector(GameMenu::menuEnter)), NULL));
+		(0.5, ccp(0, 0))), CallFuncN::create(this, callfuncN_selector(GameMenu::menuEnter)), nullptr));
 
 	
 	//标题进入动作
@@ -203,9 +202,7 @@ void GameMenu::menuSoundCallbck(cocos2d::Ref* pSender)
 
 	}
 	
-	
-	
-	Director::getInstance()->replaceScene(GameMain::scene());
+
 
 }
 

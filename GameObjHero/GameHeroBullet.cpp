@@ -7,7 +7,7 @@ void GameHeroBullet::onEnter()
 	//初始化主体
 
 	this->setContentSize(CCSizeMake(21, 52));
-	auto mainbody = CCSprite::create("Game11_1/DrDogZD.png");
+	auto mainbody = CCSprite::create("Game11_1/catZD.png");
 	mainbody->runAction(CCRepeatForever::create(CCRotateBy::create(1, 360)));
 	addChild(mainbody);
 
@@ -42,7 +42,7 @@ void GameHeroBullet::setIsVisable()
 	this->setVisible(true);
 	isvisable = true;
 	this->runAction(Sequence::create(MoveTo::create((-this->getPosition().y + 550) / 150,
-		ccp(this->getPosition().x, -550)), CallFuncN::create(this, callfuncN_selector(GameHeroBullet::setIsNotVisable)), NULL));
+		ccp(this->getPosition().x, 550)), CallFuncN::create(this, callfuncN_selector(GameHeroBullet::setIsNotVisable)), NULL));
 
 }
 

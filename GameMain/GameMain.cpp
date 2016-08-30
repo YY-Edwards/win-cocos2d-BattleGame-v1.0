@@ -12,7 +12,8 @@ bool GameMain::init()
 	}
 
 	//导演第一次出现，获取屏幕大小
-	Size size = Director::sharedDirector()->getWinSize();
+	//Size size = Director::sharedDirector()->getWinSize();
+	auto size = Director::getInstance()->getWinSize();
 
 	//创建背景
 	bg1 = Sprite::create("Game11_1/backGround.png");
@@ -34,11 +35,13 @@ bool GameMain::init()
 	hero = new GameObjHero();
 	hero->setPosition(ccp(size.width / 2, -50));
 	hero->setScale(0.5);
-	addChild(hero, 2, 1);
+	this->addChild(hero, 2, 1);
 	hero->runAction(MoveBy::create(0.5, ccp(0, 150)));
 
 	//创建敌人
-	enemys = Array::createWithCapacity(3);
+	//enemys = Array::createWithCapacity(3);
+
+	//Vector<Node*>enemys(3);
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -47,14 +50,23 @@ bool GameMain::init()
 		enemy->setPosition(ccp(size.width / 4 * type, size.height + 50));
 
 		enemy->setScale(0.5);
-		enemy->setType(type);
-		enemys->addObject(enemy);
-		addChild(enemy, 1);
+		enemy->setType(type);//3个敌人移动属性各不相同
+
+		//enemys->addObject(enemy);
+		//enemys.pushBack()
+		this->addChild(enemy, 1);
+
+		enemys.pushBack(enemy);
+
 		enemy->movestart();
 
 	}
 
-	enemys->retain();
+	//int counter = enemys.size();测试创建的大小
+
+	//警告：cocos2d::Vector<T>并不是cocos2d::Object的子类，
+	//所以不要像使用其他cocos2d类一样来用retain / release和引用计数内存管理。
+	//enemys->retain();
 
 	//创建血量UI
 	blood = 3;
@@ -90,43 +102,48 @@ bool GameMain::init()
 	//初始化猪脚的子弹
 	Node * dd;
 
-	bullets = Array::createWithCapacity(5);
-	for (int i = 0; i < bullets->capacity(); i++)
+	//bullets = Array::createWithCapacity(5);
+	//for (int i = 0; i < bullets->capacity(); i++)
+	for (int i = 0; i < 5 ; i++)//5发子弹
 	{
 		auto mybullet = new GameHeroBullet();
 		mybullet->setIsNotVisable(dd);
-		mybullet->setScale(0.5);
-		bullets->addObject(mybullet);
+		mybullet->setScale(0.5);	
+		//bullets->addObject(mybullet);
+
 		this->addChild(mybullet, 3);
 
+		bullets.pushBack(mybullet);
+
 	}
-	bullets->retain();
+	//bullets->retain();
 
 
 	//初始化敌人的子弹
 	Node * aa;
-	enemybullets = Array::createWithCapacity(10);
+	//enemybullets = Array::createWithCapacity(10);
 
-	for (int i = 0; i < enemybullets->capacity(); i++)
+	//for (int i = 0; i < enemybullets->capacity(); i++)
+	for (int i = 0; i < 10; i++)
 	{
 		auto e_bullet = new GameEnemyBullet();
 		e_bullet->setIsNotVisable(aa);
 		e_bullet->setScale(0.5);
 
-		enemybullets->addObject(e_bullet);
-
+		//enemybullets->addObject(e_bullet);
 		this->addChild(e_bullet, 3);
+		enemybullets.pushBack(e_bullet);
 
 	}
 
 	gamemark = new GameMark();
 	addChild(gamemark, 4);
-	enemybullets->retain();
+	//enemybullets->retain();
 
 	//初始化游戏结束画面及按钮
 	gameover = Sprite::create("Game11_1/gameover.png");
 	gameover->setAnchorPoint(ccp(0.5, 0.5));
-	gameover->setPosition(ccp(0, 0));
+	//gameover->setPosition(ccp(0, 0));
 	gameover->setPosition(ccp(size.width / 2, size.height / 2 + 70));
 	gameover->setVisible(false);
 	gameover->setScale(0.5);
@@ -136,6 +153,7 @@ bool GameMain::init()
 
 	pCloseItem->setPosition(ccp(size.width / 2, size.height / 2 - 50));
 	pCloseItem->setScale(0.5);
+
 
 	auto pMenu = Menu::create(pCloseItem, NULL);
 	//调整修改
@@ -148,6 +166,8 @@ bool GameMain::init()
 	isover = false;
 
 	//调用此函数，然后重写update函数便可以在游戏循环中控制逻辑
+	//加入当前节点后，程序会每帧都会自动执行一次默认的Update函数
+	//（注：一定是Update函数哦，若想调用其他自己命名的函数则使用schedule）
 	scheduleUpdate();
 	return true;
 
@@ -184,59 +204,71 @@ void GameMain::update(float time)
 	Point hpos = hero->getPosition();
 
 	//敌人和猪脚子弹的碰撞检测
-	for (int i = 0; i < 3; i++)
+	//for (int i = 0; i < 3; i++)
+	for (auto enemy : enemys)
 	{
-		GameObjEnemy  *enemy = ((GameObjEnemy*)enemys->objectAtIndex(i));
+		//GameObjEnemy  *enemy = ((GameObjEnemy*)enemys->objectAtIndex(i));
+		//GameObjEnemy* enemy = enemy;//强制转换
+
 
 		Point epos = enemy->getPosition();
 
-		if (enemy->islife)
+		if (((GameObjEnemy*)enemy)->islife)
 		{
-			for (size_t i = 0; i < bullets->capacity(); i++)
+			//for (size_t i = 0; i < bullets->capacity(); i++)
+			for (auto h_bullets: bullets)
 			{
-				if (((GameHeroBullet*)bullets->objectAtIndex(i))->getIsvisable())
+				//if (((GameHeroBullet*)bullets->objectAtIndex(i))->getIsvisable())
+				if (((GameHeroBullet*)h_bullets)->getIsvisable())
 				{
-					if (isCollion(((GameHeroBullet*)bullets->objectAtIndex(i))->getPosition(),
-						epos, 5, 13, 21, 28))
+					//if (isCollion(((GameHeroBullet*)bullets->objectAtIndex(i))->getPosition(),
+						//epos, 5, 13, 21, 28))
+					if (isCollion(((GameHeroBullet*)h_bullets)->getPosition(), epos, 5, 13, 24 ,28))
 					{
-
-						enemy->setdie();
+						((GameObjEnemy*)enemy)->setdie();
 						gamemark->addnumber(200);
 						break;
+
 					}
 				}
 
 			}
 		}
-		//敌人和猪脚的碰撞检测
-		if (!isreduce && enemy->islife && isCollion(hpos, epos, 21, 22.5, 21, 28))
+
+		//敌人和猪脚碰撞检测
+		if (!isreduce && ((GameObjEnemy*)enemy)->islife && isCollion(hpos, epos, 21, 22.5, 24, 28))
 		{
-			enemy->setdie();
+			//同时掉血
+			((GameObjEnemy*)enemy)->setdie();
 			setherohurt();
 
 		}
 	}
 
-		//猪脚和敌人子弹的碰撞检测
-		if (!isreduce)
+	//猪脚和敌人子弹的碰撞检测
+	if (!isreduce)
+	{
+			//for (size_t i = 0; i < enemybullets->capacity(); i++)
+		for (auto e_bullets: enemybullets)
 		{
-			for (size_t i = 0; i < enemybullets->capacity(); i++)
-			{
-				if (isCollion(hpos, ((GameEnemyBullet*)enemybullets->objectAtIndex(i))->
-					getPosition(), 21, 22.5, 5, 13))
-				{
-					setherohurt();
+				//if (isCollion(hpos, ((GameEnemyBullet*)enemybullets->objectAtIndex(i))->
+				//	getPosition(), 21, 22.5, 5, 13))
 
-				}
+			if (isCollion(hpos, ((GameEnemyBullet*)e_bullets)->getPosition(), 21, 22.5, 5, 13))
+			{
+				setherohurt();
 
 			}
+
 		}
+	}
+
 }
 bool GameMain::isCollion(Point p1, Point p2, int w1, int h1, int w2, int h2)
 {
 	
 	// 判断两个矩形是否碰撞
-	if (abs(p1.x - p2.x) < w1 + w2 && abs(p1.y - p2.y) < h1 + h2)
+	if ((abs(p1.x - p2.x) < w1 + w2) && (abs(p1.y - p2.y) < h1 + h2))
 	{
 		return true;
 
@@ -320,10 +352,6 @@ void GameMain::setherohurt()
 	isreduce = true;
 
 
-
-
-
-
 }
 void GameMain::resetreduce(float da)
 {
@@ -335,13 +363,20 @@ void GameMain::releaseenemyBullet(int x, int y)
 {
 
 	//遍历子弹数组，不在使用的子弹释放
-	for (size_t i = 0; i < enemybullets->capacity(); i++)
+	//for (size_t i = 0; i < enemybullets->capacity(); i++)
+	int counter = enemybullets.size();
+
+	for (auto e_bullets : enemybullets)
 	{
-		if (!((GameEnemyBullet*)enemybullets->objectAtIndex(i))->getIsvisable())
+		//if (!((GameEnemyBullet*)enemybullets->objectAtIndex(i))->getIsvisable())
+		if (!((GameEnemyBullet*)e_bullets)->getIsvisable())
 		{
 			//设置位置，并设置为可见
-			((GameEnemyBullet*)enemybullets->objectAtIndex(i))->setPosition(ccp(x, y));
-			((GameEnemyBullet*)enemybullets->objectAtIndex(i))->setIsVisable();
+			//((GameEnemyBullet*)enemybullets->objectAtIndex(i))->setPosition(ccp(x, y));
+			//((GameEnemyBullet*)enemybullets->objectAtIndex(i))->setIsVisable();
+			((GameEnemyBullet*)e_bullets)->setPosition(ccp(x, y));
+			((GameEnemyBullet*)e_bullets)->setIsVisable();
+
 			break;
 
 		}
@@ -355,13 +390,18 @@ void GameMain::releaseheroBullet(int x, int y)
 
 
 	//遍历子弹数组，不在使用的子弹释放
-	for (size_t i = 0; i < bullets->capacity(); i++)
+	//for (size_t i = 0; i < bullets->capacity(); i++)
+	for (auto h_bullets : bullets)
 	{
-		if (!((GameHeroBullet*)bullets->objectAtIndex(i))->getIsvisable())
+		//if (!((GameHeroBullet*)bullets->objectAtIndex(i))->getIsvisable())
+		if (!((GameHeroBullet*)h_bullets)->getIsvisable())
 		{
 			//设置位置，并设置为可见
-			((GameHeroBullet*)bullets->objectAtIndex(i))->setPosition(ccp(x, y));
-			((GameHeroBullet*)bullets->objectAtIndex(i))->setIsVisable();
+			//((GameHeroBullet*)bullets->objectAtIndex(i))->setPosition(ccp(x, y));
+			//((GameHeroBullet*)bullets->objectAtIndex(i))->setIsVisable();
+			((GameHeroBullet*)h_bullets)->setPosition(ccp(x, y));
+			((GameHeroBullet*)h_bullets)->setIsVisable();
+
 			break;
 
 		}

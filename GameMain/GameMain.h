@@ -18,9 +18,14 @@ public:
 	Sprite *bg1, *bg2;
 	GameObjHero *hero;
 
-	Array *enemys;
-	Array *bullets;
-	Array *enemybullets;
+	
+	Vector<Node*>enemys;//创建的时候不用设定大小？
+	Vector<Node*>bullets;
+	Vector<Node*>enemybullets;
+
+	//Array *enemys;
+	//Array *bullets;
+	//Array *enemybullets;
 
 
 	GameObjEnemy *enemy;

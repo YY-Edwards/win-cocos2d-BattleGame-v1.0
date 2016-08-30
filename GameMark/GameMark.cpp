@@ -136,7 +136,7 @@ GameMark::~GameMark()
 void GameMark::onExit()
 {
 	
-	Node::onEnter();
+	Node::onExit();
 
 
 }

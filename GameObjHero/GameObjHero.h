@@ -32,14 +32,14 @@ public:
 	virtual ~GameObjHero();
 	void releasebullet(float dt);//释放子弹
 	Rect rect();
-	virtual void onEnter();
-	virtual void onExit();
+	virtual void onEnter()override;
+	virtual void onExit()override;
 
 	//触摸相关
 	virtual bool onTouchBegan(Touch* touch, Event* event);
 	virtual void onTouchMoved(Touch* touch, Event* event);
 	virtual void onTouchEnded(Touch* touch, Event* event);
-
+	bool containsTouchLocation(Touch* touch);
 	//void onKeyPressed(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event);
 	//void onKeyReleased(cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event);
 	

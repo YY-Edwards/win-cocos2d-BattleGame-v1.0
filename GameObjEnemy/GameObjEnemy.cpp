@@ -10,22 +10,22 @@ GameObjEnemy::~GameObjEnemy()
 
 void GameObjEnemy::onEnter()
 {
-	CCNode::onEnter();
+	Node::onEnter();
 	this->setContentSize(CCSizeMake(99, 111));
 
-     mainbody = CCSprite::create("Game11_1/DrDog1.png");
+     mainbody = Sprite::create("Game11_1/DrDog1.png");
 
 	//初始化动画
-	auto animation = CCAnimation::create();
+	auto animation = Animation::create();
 	animation->addSpriteFrameWithFileName("Game11_1/DrDog1.png");
 	animation->addSpriteFrameWithFileName("Game11_1/DrDog2.png");
 
 	animation->setDelayPerUnit(0.1f);//总时间，以秒为单位。
 	animation->setRestoreOriginalFrame(true);//动画结束时恢复至初始帧
-	mainbody->runAction(CCRepeatForever::create(CCAnimate::create(animation)));
+	mainbody->runAction(RepeatForever::create(Animate::create(animation)));
 	addChild(mainbody);
 
-	boom = CCSprite::create("Game11_1/Boom1.png");
+	boom = Sprite::create("Game11_1/Boom1.png");
 	addChild(boom);
 	boom->setVisible(false);
 
@@ -73,12 +73,14 @@ void GameObjEnemy::setdie()
 
 }
 
-void GameObjEnemy::restart(Node* )
+void GameObjEnemy::restart(Node* dd)
 {
 	mainbody->setVisible(true);
 	boom->setVisible(false);
 
-	CCSize size = CCDirector::sharedDirector()->getWinSize();
+	//Size size = Director::sharedDirector()->getWinSize();
+	auto size = Director::getInstance()->getWinSize();
+
 	this->setPosition(ccp(size.width / 4 * type, size.height + 50));
 
 	islife = true;
@@ -97,18 +99,16 @@ void GameObjEnemy::movestart()
 
 	//贝塞尔曲线移动
 	ccBezierConfig bezier2;
-	bezier2.controlPoint_1 = CCPointMake(this->getPosition().x - 400, 330);
+	bezier2.controlPoint_1 = CCPointMake(this->getPosition().x - 400, 350);
 	bezier2.controlPoint_2 = CCPointMake(this->getPosition().x + 400, 280);
 	bezier2.endPosition = CCPointMake(this->getPosition().x , - 70);
-	
-	BezierTo *bezierBy2 = BezierTo::create(6, bezier2);
+	auto bezierBy2 = BezierTo::create(6, bezier2);
 
 	ccBezierConfig bezier1;
 	bezier1.controlPoint_1 = CCPointMake(this->getPosition().x + 400, 330);
-	bezier1.controlPoint_2 = CCPointMake(this->getPosition().x - 400, 280);
+	bezier1.controlPoint_2 = CCPointMake(this->getPosition().x - 400, 120);
 	bezier1.endPosition = CCPointMake(this->getPosition().x , - 70);
-
-	BezierTo *bezierBy1 = BezierTo::create(6, bezier1);
+	auto bezierBy1 = BezierTo::create(6, bezier1);
 
 
 	//设置三种移动方式，两种曲线移动方式和一种直线移动方式。
@@ -117,7 +117,7 @@ void GameObjEnemy::movestart()
 
 	case 0:
 	case 1:
-
+		//直线
 		this->runAction(CCSequence::create(CCMoveBy::create(6, ccp(0, -600)),
 			CCCallFuncN::create(this, callfuncN_selector(GameObjEnemy::restart)), NULL));
 		break;
@@ -147,12 +147,12 @@ void GameObjEnemy::releasebullet(float da)
 	
 	auto size = Director::getInstance()->getWinSize();
 
-	auto pos = this->getPosition();
+	Point pos = this->getPosition();
 
 	if (pos.y > 20 && pos.y < size.height && islife)
 	{
 	
-		GameMain *p = (GameMain *)this->getParent();
+		auto p = (GameMain *)this->getParent();
 
 		p->releaseenemyBullet(pos.x, pos.y - 30);
 
